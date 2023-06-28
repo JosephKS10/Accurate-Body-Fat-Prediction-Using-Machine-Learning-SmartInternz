@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Body Fat Prediction</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <h1 id="title" class="text-center">Body Fat Prediction</h1>
+      <p id="description" class="description text-center">
+        Thank you for taking the time to use our platform.😁
+      </p>
+    </header>
+    <form id="survey-form" action="/predict" method="POST">
+      <div class="form-group">
+        <label id="name-label" for="name">Name</label>
+        <input type="text" name="name" id="name" class="form-control" placeholder="Enter your name" required="">
+      </div>
+      <div class="form-group">
+        <label id="email-label" for="email">Email</label>
+        <input type="email" name="email" id="email" class="form-control" placeholder="Enter your Email" required="">
+      </div>
+      <div class="form-group">
+        <label id="number-label" for="number">Age</label>
+        <input type="number" name="age" id="age" min="10" max="99" class="form-control" placeholder="Age" required="">
+      </div>
+      <div class="form-group">
+        <label id="number-label" for="number">Weight</label>
+        <input type="number" name="weight" id="weight" min="10" max="999" class="form-control" placeholder="in Lbs" required="" step="0.01">
+      </div>
+      <div class="form-group">
+        <label id="number-label" for="number">Height</label>
+        <input type="number" name="height" id="height" min="10" max="999" class="form-control" placeholder="in Inches" required="" step="0.01">
+      </div>
+      <label id="section-label" for="">We now need measurements of some of your body sections, please use a measuring tape for this. <br> Input all the measurements in centimeters only.⚠️</label>
+
+      <div class="form-group">
+        <label id="number-label" for="number">Neck</label>
+        <input type="number" name="neck" id="neck" min="10" max="999" class="form-control" placeholder="in centimeters" required="" step="0.01">
+      </div>
+      <div class="form-group">
+        <label id="number-label" for="number">Chest</label>
+        <input type="number" name="chest" id="chest" min="10" max="999" class="form-control" placeholder="in centimeters" required="" step="0.01">
+      </div>
+      <div class="form-group">
+        <label id="number-label" for="number">Abdomen</label>
+        <input type="number" name="abdomen" id="abdomen" min="10" max="999" class="form-control" placeholder="in centimeters" required="" step="0.01">
+      </div>
+      <div class="form-group">
+        <label id="number-label" for="number">Hip</label>
+        <input type="number" name="hip" id="hip" min="10" max="999" class="form-control" placeholder="in centimeters" required="" step="0.01">
+      </div>
+      <div class="form-group">
+        <label id="number-label" for="number">Thigh</label>
+        <input type="number" name="thigh" id="thigh" min="10" max="999" class="form-control" placeholder="in centimeters" required="" step="0.01">
+      </div>
+      <div class="form-group">
+        <label id="number-label" for="number">Knee</label>
+        <input type="number" name="knee" id="knee" min="10" max="999" class="form-control" placeholder="in centimeters" required="" step="0.01">
+      </div>
+      <div class="form-group">
+        <label id="number-label" for="number">Ankle</label>
+        <input type="number" name="ankle" id="ankle" min="10" max="999" class="form-control" placeholder="in centimeters" required="" step="0.01">
+      </div>
+      <div class="form-group">
+        <label id="number-label" for="number">Biceps</label>
+        <input type="number" name="bicep" id="bicep" min="10" max="999" class="form-control" placeholder="in centimeters" required="" step="0.01">
+      </div>
+      <div class="form-group">
+        <label id="number-label" for="number">Forearm</label>
+        <input type="number" name="forearm" id="forearm" min="10" max="999" class="form-control" placeholder="in centimeters" required="" step="0.01">
+      </div>
+      <div class="form-group">
+        <label id="number-label" for="number">Wrist</label>
+        <input type="number" name="wrist" id="wrist" min="10" max="999" class="form-control" placeholder="in centimeters" required="" step="0.01">
+      </div>
+      <div class="form-group">
+        <button type="submit" id="submit" class="submit-button">
+          Submit
+        </button>
+      </div>
+    </form>
+    <br>
+    <div id="prediction-result" style="visibility: collapse;">
+      <h1>ML Prediction Result</h1>
+        <p>The predicted value for body fat is: {{prediction}}</p>
+    </div>
+    <div id="Compare-female" style="visibility: collapse;">
+      <h2>Body fat percentage table for women</h2>
+      <h3 id="age_group_w"></h3>
+      <table>
+        <tr>
+          <td>Category</td>
+          <td>Percentage</td>
+        </tr>
+        <tr>
+          <td>Dangerously low</td>
+          <td id="dlw"></td>
+        </tr>
+        <tr>
+          <td>Excellent</td>
+          <td id="ew"></td>
+        </tr>
+        <tr>
+          <td>Good</td>
+          <td id="gw"></td>
+        </tr>
+        <tr>
+          <td>Fair</td>
+          <td id="fw"></td>
+        </tr>
+        <tr>
+          <td>Poor</td>
+          <td id="pw"></td>
+        </tr>
+        <tr>
+          <td>Dangerously high</td>
+          <td id="dhw"></td>
+        </tr>
+      </table>
+    </div>
+    <br>
+    <div id="Compare-male" style="visibility: collapse;">
+      <h2>Body fat percentage table for men</h2>
+      <h3 id="age_group_m"></h3>
+      <table class="table">
+        <tr>
+          <td>Category</td>
+          <td>Percentage</td>
+        </tr>
+        <tr>
+          <td>Dangerously low</td>
+          <td id="dlm"></td>
+        </tr>
+        <tr>
+          <td>Excellent</td>
+          <td id="em"></td>
+        </tr>
+        <tr>
+          <td>Good</td>
+          <td id="gm"></td>
+        </tr>
+        <tr>
+          <td>Fair</td>
+          <td id="fm"></td>
+        </tr>
+        <tr>
+          <td>Poor</td>
+          <td id="pm"></td>
+        </tr>
+        <tr>
+          <td>Dangerously high</td>
+          <td id="dhm"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  
+  <div id="mttContainer" class="bootstrapiso notranslate" data-original-title="" title=""
+    style="transform: translate(836px, 251px);"></div>
+    <script>
+     
+     let check = {{ check|tojson }};
+     let age = {{ age|tojson }};
+     let dlw = document.getElementById("dlw");
+    let ew = document.getElementById("ew");
+    let gw = document.getElementById("gw");
+    let fw = document.getElementById("fw");
+    let pw = document.getElementById("pw");
+    let dhw = document.getElementById("dhw");
+    let dlm = document.getElementById("dlm");
+    let em = document.getElementById("em");
+    let gm = document.getElementById("gm");
+    let fm = document.getElementById("fm");
+    let pm = document.getElementById("pm");
+    let dhm = document.getElementById("dhm");
+    let age_group_m = document.getElementById("age_group_m")
+    let age_group_w = document.getElementById("age_group_w");
+
+let age20_29_w = ["under 14%", "14–16.5%", "16.6–19.4%", "19.5–22.7%", "22.8–27.1%", "over 27.2%"];
+let age30_39_w = ["under 14%", "14–17.4%", "17.5–20.8%", "20.9–24.6%", "24.7-29.1%", "over 29.2%"];
+let age40_49_w = ["under 14%", "14–19.8%", "19.9–23.8%", "23.9–27.6%", "27.7–31.9%", "over 31.3%"];
+let age50_59_w = ["under 14%", "14–22.5%", "22.6–27%", "27.1–30.4%", "30.5–34.5%", "over 34.6%"];
+let age60_69_w = ["under 14%", "14–23.2%", "23.3–27.9%", "28–31.3%", "31.4–35.4%", "over 35.5%"];
+
+let age20_29_m = ["under 8%", "8–10.5%", "10.6–14.8%", "14.9–18.6%", "18.7–23.1%", "over 23.2%"];
+let age30_39_m = ["under 8%", "8–14.5%", "14.6–18.2%", "18.3–21.3%", "21.4–24.9%", "over 25%"];
+let age40_49_m = ["under 8%", "8–17.4%", "17.5–20.6%", "20.7–23.4%", "23.5–26.6%", "over 26.7%"];
+let age50_59_m = ["under 8%", "8–19.1%", "19.2–22.1%", "22.2–24.6%", "24.7–27.8%", "over 27.9%"];
+let age60_69_m = ["under 8%", "8–19.7%", "19.8–22.6%", "22.7–25.2%", "25.3–28.4%", "over 28.5%"];
+
+let age_group = ["Age 20–29","Age 30–39","Age 40–49","Age 50–59","Age 60–69"]
+
+if (check) {
+  let predictionDiv = document.getElementById("prediction-result");
+  let compare_male = document.getElementById("Compare-male");
+  let compare_female = document.getElementById("Compare-female");
+  predictionDiv.style.visibility = "visible";
+  console.log(age)
+  
+  if (age >= 20 && age <= 29) {
+    dlw.innerHTML = age20_29_w[0];
+    ew.innerHTML = age20_29_w[1];
+    gw.innerHTML = age20_29_w[2];
+    fw.innerHTML = age20_29_w[3];
+    pw.innerHTML = age20_29_w[4];
+    dhw.innerHTML = age20_29_w[5];
+
+    dlm.innerHTML = age20_29_m[0];
+    em.innerHTML = age20_29_m[1];
+    gm.innerHTML = age20_29_m[2];
+    fm.innerHTML = age20_29_m[3];
+    pm.innerHTML = age20_29_m[4];
+    dhm.innerHTML = age20_29_m[5];
+    age_group_w.innerHTML = age_group[0];
+    age_group_m.innerHTML = age_group[0];
+    
+  } else if (age >= 30 && age <= 39) {
+    dlw.innerHTML = age30_39_w[0];
+    ew.innerHTML = age30_39_w[1];
+    gw.innerHTML = age30_39_w[2];
+    fw.innerHTML = age30_39_w[3];
+    pw.innerHTML = age30_39_w[4];
+    dhw.innerHTML = age30_39_w[5];
+
+    dlm.innerHTML = age30_39_m[0];
+    em.innerHTML = age30_39_m[1];
+    gm.innerHTML = age30_39_m[2];
+    fm.innerHTML = age30_39_m[3];
+    pm.innerHTML = age30_39_m[4];
+    dhm.innerHTML = age30_39_m[5];
+
+    age_group_w.innerHTML = age_group[1];
+    age_group_m.innerHTML = age_group[1];
+  } 
+  else if (age >= 40 && age <= 49) {
+    dlw.innerHTML = age40_49_w[0];
+    ew.innerHTML = age40_49_w[1];
+    gw.innerHTML = age40_49_w[2];
+    fw.innerHTML = age40_49_w[3];
+    pw.innerHTML = age40_49_w[4];
+    dhw.innerHTML = age40_49_w[5];
+
+    dlm.innerHTML = age40_49_m[0];
+    em.innerHTML = age40_49_m[1];
+    gm.innerHTML = age40_49_m[2];
+    fm.innerHTML = age40_49_m[3];
+    pm.innerHTML = age40_49_m[4];
+    dhm.innerHTML = age40_49_m[5];
+
+    age_group_w.innerHTML = age_group[2];
+    age_group_m.innerHTML = age_group[2];
+  } else if (age >= 50 && age <= 59) {
+    dlw.innerHTML = age50_59_w[0];
+    ew.innerHTML = age50_59_w[1];
+    gw.innerHTML = age50_59_w[2];
+    fw.innerHTML = age50_59_w[3];
+    pw.innerHTML = age50_59_w[4];
+    dhw.innerHTML = age50_59_w[5];
+
+    dlm.innerHTML = age50_59_m[0];
+    em.innerHTML = age50_59_m[1];
+    gm.innerHTML = age50_59_m[2];
+    fm.innerHTML = age50_59_m[3];
+    pm.innerHTML = age50_59_m[4];
+    dhm.innerHTML = age50_59_m[5];
+    age_group_w.innerHTML = age_group[3];
+    age_group_m.innerHTML = age_group[3];
+  } else if (age >= 60 && age <= 69) {
+    dlw.innerHTML = age60_69_w[0];
+    ew.innerHTML = age60_69_w[1];
+    gw.innerHTML = age60_69_w[2];
+    fw.innerHTML = age60_69_w[3];
+    pw.innerHTML = age60_69_w[4];
+    dhw.innerHTML = age60_69_w[5];
+
+    dlm.innerHTML = age60_69_m[0];
+    em.innerHTML = age60_69_m[1];
+    gm.innerHTML = age60_69_m[2];
+    fm.innerHTML = age60_69_m[3];
+    pm.innerHTML = age60_69_m[4];
+    dhm.innerHTML = age60_69_m[5];
+    age_group_w.innerHTML = age_group[4];
+    age_group_m.innerHTML = age_group[4];
+  }
+
+  compare_female.style.visibility = "visible";
+    compare_male.style.visibility = "visible";
+}
+      
+
+      
+    </script>
+</body>
+
+</html>
